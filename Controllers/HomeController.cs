@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Prueba_Tecnica.Models;
+using Newtonsoft.Json;
 
 namespace Prueba_Tecnica.Controllers
 {
@@ -38,6 +39,19 @@ namespace Prueba_Tecnica.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public JsonResult getBill(PruebaTecnica.Models.Bill bill)
+        {
+            var twoToThreePassager = bill.subida3 - bill.bajada3;
+         
+            bill.factura2 = bill.bajada2 * 1000;
+            bill.factura3 = bill.bajada3 * 1500;
+            bill.factura4 = twoToThreePassager * 2300 + (bill.subida4 - twoToThreePassager) * 1300;
+
+            bill.total = bill.factura2 + bill.factura3 + bill.factura4;
+
+            return Json(bill);
         }
     }
 }
